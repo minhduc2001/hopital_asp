@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAd.cshtml";
+}
+@using WebAppYte.Models
+@{
+    var u = Session["userAdmin"] as WebAppYte.Models.NguoiDung;
+    DateTime startDate = DateTime.Today.AddMonths(-1);
+    DateTime endDate = DateTime.Today;
+}
+<br />
+@{
+    <script>
+            $(document).ready(function () {
+                $('#exportExcelBtn').click(function () {
+                    var startDate = $('#startDate').val();
+                    var endDate = $('#endDate').val();
+                    $.ajax({
+                        type: 'POST',
+                        url:action='@Url.Action("ExportExcel", "ThongKe")',
+                        data: { startDate: startDate, endDate: endDate },
+                        success: function (data) {
+                            // Xử lý response
+                            var a = document.createElement('a');
+                            a.href = window.URL.createObjectURL(data);
+                            a.download = 'filename.xlsx';
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                        },
+                        error: function () {
+                            // Xử lý lỗi nếu có
+                            alert('Đã xảy ra lỗi khi tạo file excel.');
+                        }
+                    });
+                });
+            });
+    </script>
+    if (u != null)
+    {
+        <h3>Thống kê</h3>
+        <br />
+
+        <form>
+            <label for="startDate">Từ ngày:</label>
+            <input type="date" id="startDate" name="startDate" value="@startDate.ToString("yyyy-MM-dd")">
+            <label for="endDate">Đến ngày:</label>
+            <input type="date" id="endDate" name="endDate" value="@endDate.ToString("yyyy-MM-dd")">
+            <button id="exportExcelBtn" type="button">Xuất excel</button>
+        </form>
+        @*<center><img src="~/images/images/corona.jpg" /></center>*@
+    }
+    else
+    {
+        @*<h3> <a href="/Home/Dangnhap">Đăng nhập ngay </a> </h3>*@
+    }
+
+}

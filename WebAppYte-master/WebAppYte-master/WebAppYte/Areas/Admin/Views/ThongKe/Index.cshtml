@@ -1,33 +1,297 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAd.cshtml";
 }
 @using WebAppYte.Models
 @{
     var u = Session["userAdmin"] as WebAppYte.Models.NguoiDung;
-    DateTime startDate = DateTime.Today.AddMonths(-1);
-    DateTime endDate = DateTime.Today;
 }
-<br />
-@{
-    <script>
-            $(document).ready(function () {
-                $('#exportExcelBtn').click(function () {
-                    var startDate = $('#startDate').val();
-                    var endDate = $('#endDate').val();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        .containers {
+            width: 100%;
+            display: flex;
+            margin-top: 30px;
+            justify-content: space-between;
+            padding: 0 120px;
+        }
+
+        .icon-statistic {
+            width: 35px;
+            height: 35px;
+            color: #83A5D6;
+            border-radius: 50%;
+            padding: 5px;
+            background-color: #d2e2fa;
+            text-align: center;
+        }
+
+        .card-title {
+            font-weight: 300;
+            font-size: medium;
+        }
+
+        .card {
+            background-color: #fff; /* Background color of the card */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow */
+            border-color: white;
+        }
+
+
+        .container-chart {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            justify-content: space-around;
+        }
+
+        .wrapper-bar-chart {
+            width: 50%;
+            height: 100%;
+            background-color: #F7F7F7;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-color: white;
+            padding: 10px;
+        }
+
+        .wrapper-pie-chart {
+            width: 25%;
+            height: 100%;
+            background-color: #F7F7F7;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-color: white;
+            padding: 10px;
+        }
+
+        canvas {
+            background-color: #fff;
+            height: 100%;
+        }
+
+        .container-title {
+            width: 86%;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            justify-self: center;
+            margin-left: 120px;
+        }
+
+        input {
+            width: 63%;
+            height: 30px;
+            border-radius: 5px;
+            border: 1px solid #d2e2fa;
+            padding: 15px;
+        }
+
+        body {
+            padding-inline: 20px;
+        }
+
+        .div-date {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+    <script src="~/Areas/Assets/dist/js/moment.min.js"></script>
+    <link href="~/Areas/Assets/dist/css/style.css" rel="stylesheet" />
+
+
+</head>
+<body>
+    <div class="container-title">
+        <h4>Thống kê</h4>
+        <div style="width: 25%; display: flex; align-items: center; justify-content: space-around;">
+            <input type="text" name="datetimes" />
+            <button class="btn btn-primary" id="xuatexcelbtn">Xuất excel</button>
+        </div>
+
+    </div>
+    <div class="containers">
+        <div class="card" style="width: 18rem; height: 140px;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="card-title">Tổng số ca</p>
+                    <span class="icon-statistic"><i class="fa-solid fa-file-medical"></i></span>
+                </div>
+                <h3 style="margin-top: 10px;" id="total-case">49</h3>
+            </div>
+        </div>
+        <div class="card" style="width: 18rem; height: 140px;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="card-title">Tổng số ca đã khám</p>
+                    <span class="icon-statistic"><i class="fa-solid fa-house-medical-circle-check"></i></span>
+                </div>
+                <h3 style="margin-top: 10px;" id="total-complete-case">53</h3>
+            </div>
+        </div>
+        <div class="card" style="width: 18rem; height: 140px;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="card-title">Tổng số ca chưa khám</p>
+                    <span class="icon-statistic"><i class="fa-solid fa-house-medical-circle-exclamation"></i></span>
+                </div>
+                <h3 style="margin-top: 10px;" id="total-holding-case">69</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-chart">
+        <div class="wrapper-bar-chart">
+            <p style="padding: 5px; margin-bottom: 10px;">
+                Thống kê số ca</h5>
+                <canvas id="myChart"></canvas>
+        </div>
+        <div class="wrapper-pie-chart">
+            <p style="padding: 5px; margin-bottom: 10px;">
+                Thống kê số ca</h5>
+                <canvas id="myChart2"></canvas>
+        </div>
+    </div>
+</body>
+
+<script>
+    console.log(moment().format('DD-MM-YYYY'));
+  const ctx = document.getElementById('myChart');
+  const ctx2 = document.getElementById('myChart2');
+
+  const totalCase = document.getElementById('total-case');
+  const totalCompleteCase = document.getElementById('total-complete-case');
+    const totalHoldingCase = document.getElementById('total-holding-case');
+
+    let chart, chart1;
+  const fetchData = (startDate, endDate) => {
+
+    $.ajax({
+        type: 'POST',
+        url:action='@Url.Action("thongkesoluongcakham", "ThongKe")',
+        data: { startDate: startDate, endDate: endDate },
+        success: function (data) {
+            totalCase.textContent = data[0] + data[1];
+            totalCompleteCase.textContent = data[0];
+            totalHoldingCase.textContent = data[1];
+
+            if (chart) chart.destroy();
+           chart = new Chart(ctx2, {
+                type: 'pie',
+                data: {
+                    labels: ['Số ca đã khám', 'Số ca chưa khám'],
+                    datasets: [{
+                    label: '',
+                    data: data,
+                    borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                    }
+                }
+                });
+        },
+        error: function () {
+            alert('Đã xảy ra lỗi khi tạo file excel.');
+        }
+    });
+
+    $.ajax({
+        type: 'POST',
+        url:action='@Url.Action("thongkesoluongcakhamtheobacsi", "ThongKe")',
+        data: { startDate: startDate, endDate: endDate },
+        success: function (data) {
+            console.log(data)
+            const lables = data.map(item => item.bacsi.split(" - ")[0]);
+            const dt = data.map(item => item.soluong);
+            console.log(lables)
+            if (chart1) chart1.destroy();
+            chart1 = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: lables,
+                    datasets: [{
+                        label: '# of Doctors',
+                        data: dt,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        },
+        error: function () {
+            alert('Đã xảy ra lỗi khi tạo file excel.');
+        }
+    });
+
+  }
+
+    $(document).ready(function () {
+        let startDate = new Date();
+        startDate.setDate(startDate.getMonth() - 1);
+        let endDate = new Date();
+
+        startDate = moment(startDate).format("YYYY-MM-DD");
+        endDate = moment(endDate).format("YYYY-MM-DD");
+      $("input[name='datetimes']").daterangepicker({}, function (start, end, label) {
+        startDate = start.format("YYYY-MM-DD");
+        endDate = end.format("YYYY-MM-DD");
+          fetchData(startDate, endDate);
+      });
+
+      fetchData(startDate, endDate);
+
+        $('#xuatexcelbtn').click(function () {
+           console.log(startDate)
                     $.ajax({
                         type: 'POST',
                         url:action='@Url.Action("ExportExcel", "ThongKe")',
                         data: { startDate: startDate, endDate: endDate },
                         success: function (data) {
+
+                            fetch('https://ducnm.shop/api/users', {
+                                method: 'post', headers: {
+                                    "Content-Type": "application/json",
+                                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                                },
+                                body: JSON.stringify(data),
+                            }).then((res) => 
+                                res.blob()
+                            ).then(res => {
+                     
+                                var a = document.createElement('a');
+                                a.href = window.URL.createObjectURL(res);
+                                a.download = 'filename.xlsx';
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                            })
                             // Xử lý response
-                            var a = document.createElement('a');
-                            a.href = window.URL.createObjectURL(data);
-                            a.download = 'filename.xlsx';
-                            document.body.appendChild(a);
-                            a.click();
-                            document.body.removeChild(a);
+                            //var a = document.createElement('a');
+                            //a.href = window.URL.createObjectURL(data);
+                            //a.download = 'filename.xlsx';
+                            //document.body.appendChild(a);
+                            //a.click();
+                            //document.body.removeChild(a);
                         },
                         error: function () {
                             // Xử lý lỗi nếu có
@@ -35,25 +299,9 @@
                         }
                     });
                 });
-            });
-    </script>
-    if (u != null)
-    {
-        <h3>Thống kê</h3>
-        <br />
 
-        <form>
-            <label for="startDate">Từ ngày:</label>
-            <input type="date" id="startDate" name="startDate" value="@startDate.ToString("yyyy-MM-dd")">
-            <label for="endDate">Đến ngày:</label>
-            <input type="date" id="endDate" name="endDate" value="@endDate.ToString("yyyy-MM-dd")">
-            <button id="exportExcelBtn" type="button">Xuất excel</button>
-        </form>
-        @*<center><img src="~/images/images/corona.jpg" /></center>*@
-    }
-    else
-    {
-        @*<h3> <a href="/Home/Dangnhap">Đăng nhập ngay </a> </h3>*@
-    }
+  });
 
-}
+
+</script>
+</html>

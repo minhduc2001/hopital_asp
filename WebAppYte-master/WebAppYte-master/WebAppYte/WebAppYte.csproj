@@ -240,6 +240,10 @@
     <Compile Include="DAO\TTNguoiDung.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Admin\Views\ThongKe\Index.cshtml.css" />
+    <Content Include="Areas\Assets\dist\css\style.css" />
+    <Content Include="Areas\Assets\dist\js\moment.min.js" />
+    <Content Include="Areas\Assets\dist\js\scripts.js" />
     <Content Include="Common\ckeditor\adapters\jquery.js" />
     <Content Include="Common\ckeditor\build-config.js" />
     <Content Include="Common\ckeditor\ckeditor.js" />

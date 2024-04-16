@@ -1,0 +1,74 @@
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.icon-statistic {
+    width: 35px;
+    height: 35px;
+    color: #83A5D6;
+    border-radius: 50%;
+    padding: 5px;
+    background-color: #d2e2fa;
+    text-align: center;
+}
+
+.card-title {
+    font-weight: 300;
+    font-size: medium;
+}
+
+.card {
+    background-color: #fff; /* Background color of the card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow */
+    border-color: white;
+}
+
+
+.container-chart {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    justify-content: space-between;
+}
+
+.wrapper-bar-chart {
+    width: 50%;
+    height: 100%;
+    background-color: #F7F7F7;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-color: white;
+    padding: 10px;
+}
+
+.wrapper-pie-chart {
+    width: 30%;
+    height: 100%;
+    background-color: #F7F7F7;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-color: white;
+    padding: 10px;
+}
+
+canvas {
+    background-color: #fff;
+    height: 100%;
+}
+
+.container-title {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding-inline: 20px;
+}
+
+input {
+    width: 60%;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid #d2e2fa;
+    padding: 15px;
+}
